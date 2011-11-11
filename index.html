@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+  <link rel="stylesheet" href="css/legislators.css"/>
+  <script src="js/jquery-1.7.min.js"></script>
+  <script src="js/underscore-min.js"></script>
+  <script src="js/backbone-min.js"></script>
+  <script src="js/legislators.js"></script>
+</head>
+<body>
+
+<div id="legislators"></div>
+
+<script type="text/template" id="legislator_template">
+  <div class="legislator <%= party %>" id="<%= bioguide_id %>">
+    <img src="http://www.opencongress.org/images/photos/thumbs_125/<%= govtrack_id %>.jpeg" />
+    <span class="name"><%= title %> <%= firstname %> <%= lastname %></span>
+    <span class="state"><%= state %></span>
+    <div class="details"></div>
+  </div>
+</script>
+
+</body>
+</html>

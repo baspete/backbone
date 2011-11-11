@@ -1,0 +1,65 @@
+body {
+  font-family: arial, Sans-serif;
+  color: #333333;
+}
+h4 {
+  margin: 5px 0;
+}
+ul {
+  margin: 0 0 10px;
+}
+li {
+  margin-bottom: 5px;
+}
+.filter {
+  border: 1px solid #CCCCCC;
+  width: 150px;
+  padding: 10px;
+  float: left;
+  text-align: right;
+}
+.list {
+  margin-left: 180px;
+}
+.numResults {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.legislator {
+  border: 1px solid #CCCCCC;
+  margin-bottom: 10px;
+  width: 600px;
+  padding: 10px;
+  overflow: auto;
+}
+  .legislator img {
+    width: 40px;
+    float: left;
+  }
+  .legislator .name {
+    float: left;
+    margin-left: 10px;
+  }
+  .legislator .state {
+    margin: 0 5px;
+  }
+  
+  .legislator .committees,
+  .legislator .twitter,
+  .legislator .facebook {
+    clear: both;
+    padding: 10px 0 0;
+    margin: 0;
+  }
+.D {
+  background-color: #EAEAFF;
+}
+.R {
+  background-color: #FFEAF4;
+}
+.I {
+  
+}
+.hover {
+  cursor: pointer;
+}
