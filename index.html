@@ -10,7 +10,8 @@
 </head>
 <body>
 
-<div id="legislators"></div>
+<div id="filter" class="filter"></div>
+<div id="legislators" class="list"></div>
 
 <script type="text/template" id="legislator_template">
   <div class="legislator <%= party %>" id="<%= bioguide_id %>">
@@ -19,6 +20,12 @@
     <span class="state"><%= state %></span>
     <div class="details"></div>
   </div>
+</script>
+
+<script type="text/template" id="filter_template">
+  State: <select name="state" id="state"><option value="">All</option><option value="AK">AK</option><option value="AL">AL</option><option value="AR">AR</option><option value="AZ">AZ</option><option value="CA">CA</option><option value="CO">CO</option><option value="CT">CT</option><option value="DC">DC</option><option value="DE">DE</option><option value="FL">FL</option><option value="GA">GA</option><option value="HI">HI</option><option value="IA">IA</option><option value="ID">ID</option><option value="IL">IL</option><option value="IN">IN</option><option value="KS">KS</option><option value="KY">KY</option><option value="LA">LA</option><option value="MA">MA</option><option value="MD">MD</option><option value="ME">ME</option><option value="MI">MI</option><option value="MN">MN</option><option value="MO">MO</option><option value="MS">MS</option><option value="MT">MT</option><option value="NC">NC</option><option value="ND">ND</option><option value="NE">NE</option><option value="NH">NH</option><option value="NJ">NJ</option><option value="NM">NM</option><option value="NV">NV</option><option value="NY">NY</option><option value="OH">OH</option><option value="OK">OK</option><option value="OR">OR</option><option value="PA">PA</option><option value="RI">RI</option><option value="SC">SC</option><option value="SD">SD</option><option value="TN">TN</option><option value="TX">TX</option><option value="UT">UT</option><option value="VA">VA</option><option value="VT">VT</option><option value="WA">WA</option><option value="WI">WI</option><option value="WV">WV</option><option value="WY">WY</option></select>
+  <br/>Chamber: <select name="title" id="title"><option value="">Both</option><option value="Sen">Senate</option><option value="Rep">House</option></select>
+  <br/>Party: <select name="party" id="party"><option value="">All</option><option value="D">D</option><option value="R">R</option><option value="I">I</option></select>
 </script>
 
 </body>

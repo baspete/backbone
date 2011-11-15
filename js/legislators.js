@@ -1,15 +1,63 @@
 
 $(function(){
   
-  window.Legislator = Backbone.Model.extend({
+  var baseUrl = "http://services.sunlightlabs.com/api/legislators.getList.json?apikey=7efa89de59164c85aaff5cc5774df43f&";
+  
+  var Filter = Backbone.Model.extend({
+    change: function(){
+      $("#legislators").empty();
+      var params = this.toJSON();
+      // sending empty query params breaks 
+      for(var i in params){
+        if(params[i] === "undefined" || params[i] === ""){
+          delete params[i];
+        }
+      }
+      legislators.url = baseUrl + $.param(params);
+      legislators.initialize();
+    }
+ });
+  
+  var FilterView = Backbone.View.extend({
+    el: $("#filter"),
+    template: _.template($('#filter_template').html()),
+    initialize: function(){
+      this.render();
+    },
+    events: {
+      "change select": "changed",
+    },
+    render: function() {
+      this.el.html(this.template());
+      return this;
+    },
+    changed: function(e) {
+      var target = $(e.currentTarget),
+          data = {};
+      data[target.attr('name')] = target.attr('value');
+      this.model.set(data);
+    }
+  });
+  
+  var Legislator = Backbone.Model.extend({
     initialize: function(){
       console.log("Created Legislator",this.get("legislator"));
     }
   });
   
-  window.LegislatorList = Backbone.Collection.extend({
-    model: Legislator,
-    url: "http://services.sunlightlabs.com/api/legislators.getList.json?apikey=7efa89de59164c85aaff5cc5774df43f&state=CA&title=Rep",
+  var LegislatorList = Backbone.Collection.extend({
+    url: baseUrl + "state=CA&title=Sen",
+    initialize: function(){
+      this.fetch({
+        success: function(collection) {
+          collection.each(function(Legislator) {
+            var view = new LegislatorView({
+              model: Legislator
+            });
+          });
+         }
+      })
+    },
     sync: function(method, model, options){  
       options.cache = true; // sunlightlabs needs this to return jsonp
       options.jsonp = "jsonp"; // sunlightlabs needs this to return jsonp
@@ -21,28 +69,21 @@ $(function(){
     }
   });
 
-  window.LegislatorView = Backbone.View.extend({
+  var LegislatorView = Backbone.View.extend({
     template: _.template($('#legislator_template').html()),
+    initialize: function(){
+      this.render();
+    },
     render: function() {
       var l = this.model.toJSON().legislator;
-      console.log("view: ",this.model.toJSON())
       $("#legislators").append(this.template(l));
       return this;
     }
   });
 
+  // load filters
+  window.filterView = new FilterView({model:(new Filter())});
   // load legislators
   window.legislators = new LegislatorList()
 
-  legislators.fetch({
-    success: function(collection, response) {
-      collection.each(function(Legislator) {
-        var view = new LegislatorView({
-          model: Legislator
-        });
-        view.render();
-      });
-     }
-   });
-  
 });
