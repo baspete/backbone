@@ -1,7 +1,7 @@
 
 $(function(){
   
-  var baseUrl = "http://services.sunlightlabs.com/api/legislators.getList.json?apikey=7efa89de59164c85aaff5cc5774df43f&";
+  var sunlightBaseUrl = "http://services.sunlightlabs.com/api/legislators.getList.json?apikey=7efa89de59164c85aaff5cc5774df43f&";
   
   var Filter = Backbone.Model.extend({
     change: function(){
@@ -13,11 +13,12 @@ $(function(){
           delete params[i];
         }
       }
-      legislators.url = baseUrl + $.param(params);
+      // This is ghetto. How to bind here?
+      legislators.url = sunlightBaseUrl + $.param(params);
       legislators.initialize();
     }
- });
-  
+   });
+
   var FilterView = Backbone.View.extend({
     el: $("#filter"),
     template: _.template($('#filter_template').html()),
@@ -46,7 +47,7 @@ $(function(){
   });
   
   var LegislatorList = Backbone.Collection.extend({
-    url: baseUrl + "state=CA&title=Sen",
+    url: sunlightBaseUrl,
     initialize: function(){
       this.fetch({
         success: function(collection) {
@@ -59,13 +60,13 @@ $(function(){
       })
     },
     sync: function(method, model, options){  
-      options.cache = true; // sunlightlabs needs this to return jsonp
-      options.jsonp = "jsonp"; // sunlightlabs needs this to return jsonp
+      options.cache    = true; // sunlightlabs needs this to return jsonp
+      options.jsonp    = "jsonp"; // sunlightlabs needs this to return jsonp
       options.dataType = "jsonp";  // by tell backbone.js to use jsonp
       return Backbone.sync(method, model, options);  
     },
     parse: function(response){
-      return(response.response.legislators);
+      return(response.response.legislators); // just return the array, not the whole object
     }
   });
 
