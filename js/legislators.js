@@ -1,23 +1,22 @@
+"use strict"
 
 $(function(){
-  
   var sunlightBaseUrl = "http://services.sunlightlabs.com/api/legislators.getList.json?apikey=7efa89de59164c85aaff5cc5774df43f&";
-  
+  var sunlightParams = {
+    "state":"CA",
+    "title":"Sen",
+  };
+
   var Filter = Backbone.Model.extend({
-    change: function(){
-      $("#legislators").empty();
-      var params = this.toJSON();
-      // sending empty query params breaks 
-      for(var i in params){
-        if(params[i] === "undefined" || params[i] === ""){
-          delete params[i];
-        }
-      }
-      // This is ghetto. How to bind here?
-      legislators.url = sunlightBaseUrl + $.param(params);
-      legislators.initialize();
+    initialize: function(){
+      // set the values from the global "sunlightParams object"      
+      this.set(sunlightParams);
+      // on change, update the global "sunlightParams" object
+      this.bind("change",function(){
+        sunlightParams = this.toJSON();
+      })
     }
-   });
+  });
 
   var FilterView = Backbone.View.extend({
     el: $("#filter"),
@@ -30,6 +29,10 @@ $(function(){
     },
     render: function() {
       this.el.html(this.template());
+      // set values based on model
+      $("#state").val(this.model.get("state"));
+      $("#title").val(this.model.get("title"));
+      $("#party").val(this.model.get("party"));
       return this;
     },
     changed: function(e) {
@@ -40,18 +43,22 @@ $(function(){
     }
   });
   
-  var Legislator = Backbone.Model.extend({
-    initialize: function(){
-      console.log("Created Legislator",this.get("legislator"));
-    }
-  });
+  var Legislator = Backbone.Model.extend();
   
-  var LegislatorList = Backbone.Collection.extend({
-    url: sunlightBaseUrl,
+  var LegislatorsList = Backbone.Collection.extend({
+    url: function(){
+      for(var i in sunlightParams){
+        if(sunlightParams[i] === "undefined" || sunlightParams[i] === ""){
+          delete sunlightParams[i];
+        }
+      }
+      return sunlightBaseUrl + $.param(sunlightParams);
+    },
     initialize: function(){
+      $("#legislators").empty(); // ghetto! a collection shouldn't know about view stuff
       this.fetch({
-        success: function(collection) {
-          collection.each(function(Legislator) {
+        success: function(items) {
+          items.each(function(Legislator) {
             var view = new LegislatorView({
               model: Legislator
             });
@@ -82,9 +89,22 @@ $(function(){
     }
   });
 
-  // load filters
-  window.filterView = new FilterView({model:(new Filter())});
-  // load legislators
-  window.legislators = new LegislatorList()
+  // Here's the app. Seems to me this is more of an object factory
+  // and an event dispatcher combined.
+  var LegislatorsApp = Backbone.Model.extend({
+    initialize: function(){
 
+      var legislators = new LegislatorsList();
+
+      var filter = new Filter().bind("change",function(){
+        legislators.initialize();
+      });
+
+      var filterView = new FilterView({model:filter});
+
+    }
+  })
+
+  // load app
+  window.legislatorsApp = new LegislatorsApp();
 });
