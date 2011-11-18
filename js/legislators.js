@@ -15,7 +15,7 @@ $(function(){
       this.bind("change",function(){
         sunlightParams = this.toJSON();
       })
-    }
+    } 
   });
 
   var FilterView = Backbone.View.extend({
