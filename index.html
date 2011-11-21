@@ -17,7 +17,12 @@
     <img src="http://www.opencongress.org/images/photos/thumbs_125/<%= govtrack_id %>.jpeg" />
     <span class="name"><%= title %> <%= firstname %> <%= lastname %></span>
     <span class="state"><%= state %></span>
-    <div class="details"></div>
+    <div class="details">
+      <div class="facebook">
+        <h4>Facebook:</h4>
+         <a href="<%= fb.wall_url %>" target="_blank"><img src="<%= fb.avatar_url %>"/></a>
+      </div>
+    </div>
   </div>
 </script>
 

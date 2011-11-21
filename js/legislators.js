@@ -43,7 +43,14 @@ $(function(){
     }
   });
   
-  var Legislator = Backbone.Model.extend();
+  var Legislator = Backbone.Model.extend({
+    initialize: function(){
+      var avatar_url = "http://graph.facebook.com/"+this.get("facebook_id")+"/picture";
+      var wall_url = "http://www.facebook.com/"+this.get("facebook_id");
+      this.set({"fb":{"avatar_url": avatar_url, "wall_url": wall_url}});
+      console.log("created legislator: ", this.toJSON())
+    }
+  });
   
   var LegislatorsList = Backbone.Collection.extend({
     url: function(){
@@ -55,13 +62,11 @@ $(function(){
       return sunlightBaseUrl + $.param(sunlightParams);
     },
     initialize: function(){
-      $("#legislators").empty(); // ghetto! a collection shouldn't know about view stuff
       this.fetch({
         success: function(items) {
-          items.each(function(Legislator) {
-            var view = new LegislatorView({
-              model: Legislator
-            });
+          items.each(function(data) {
+            var model = new Legislator(data.get("legislator"))
+            var view = new LegislatorView(model);
           });
          }
       })
@@ -83,7 +88,8 @@ $(function(){
       this.render();
     },
     render: function() {
-      var l = this.model.toJSON().legislator;
+      var l = this.attributes;
+      console.log("view: ",l)
       $("#legislators").append(this.template(l));
       return this;
     }
@@ -97,6 +103,7 @@ $(function(){
       var legislators = new LegislatorsList();
 
       var filter = new Filter().bind("change",function(){
+        $("#legislators").empty();
         legislators.initialize();
       });
 
