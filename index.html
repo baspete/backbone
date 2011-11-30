@@ -22,8 +22,15 @@
         <h4>Facebook:</h4>
          <a href="<%= fb.wall_url %>" target="_blank"><img src="<%= fb.avatar_url %>"/></a>
       </div>
+      <div class="twitter">
+        <h4>Tweets</h4>
+        <ul></ul>
     </div>
   </div>
+</script>
+
+<script type="text/template" id="tweet_template">
+  <li class="tweet"><%= text %></li>
 </script>
 
 <script type="text/template" id="filter_template">
